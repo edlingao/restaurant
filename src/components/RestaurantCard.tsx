@@ -4,8 +4,9 @@ import StarHalfIcon from '@mui/icons-material/StarHalf';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 import '@/styles/restaurant.scss';
-import useIsMobile from "@/hooks/useIsMobile";
 import { Button } from "./Button";
+import useIsMobile from "@/hooks/useIsMobile";
+import { memo, useCallback, useMemo } from "react";
 
 type RestaurantCardProps = {
   restaurant: Restaurant;
@@ -27,7 +28,7 @@ function Price({price}: {price: string}) {
   );
 }
 
-function StarRaitin({ raiting }: { raiting: number }) {
+function StarRaiting({ raiting }: { raiting: number }) {
   const stars = [];
   let currentRating = raiting;
 
@@ -53,22 +54,37 @@ function StarRaitin({ raiting }: { raiting: number }) {
 }
 
 export function RestaurantCard({restaurant}: RestaurantCardProps) {
-  const isMobile = useIsMobile();
   
-  const handleClick = () => window.open(restaurant.url, '_blank');
+  const handleClick = useCallback(()=> window.open(restaurant.url, '_blank'), [restaurant.url]);
 
-  return (
-    <div className="restaurant" onClick={handleClick}>
+  const isMobile = useIsMobile();
+
+  const MobileContent = useMemo(() => (
+      <div className="restaurant-table" onClick={handleClick} tabIndex={-1} >
+        <div className="restaurant-table__image hero" style={{
+          backgroundImage: `url(${restaurant.image_url})`,
+        }}></div>
+        <div className="restaurant-table__content">
+          <p className="elipsis"><b>{restaurant.name}</b></p>
+          <StarRaiting raiting={restaurant.rating} />
+          <Price price={restaurant.price} />
+          <Button text="VIEW" onClick={handleClick} />
+        </div>
+      </div>
+    ), [restaurant.name, restaurant.rating, restaurant.price, restaurant.image_url, handleClick]);
+  
+  const DesktopContent = useMemo(() => (
+    <div className="restaurant" onClick={handleClick} tabIndex={-1}>
       <header className="hero" style={{
         backgroundImage: `url(${restaurant.image_url})`,
       }}>
       </header>
       <main className="Restaurant__main">
-        <div className="content">
+        <div className="content elipsis">
           <h3>{restaurant.name}</h3>
         </div> 
         <div className="categories-price">
-          <p className="Restaurant__categories">
+          <p className="Restaurant__categories elipsis">
             {restaurant.categories.map((category) => category.title).join(', ')}
           </p>
           <Price price={restaurant.price} />
@@ -79,10 +95,13 @@ export function RestaurantCard({restaurant}: RestaurantCardProps) {
           <Button text="VIEW" onClick={handleClick} />
         </div>
         <div className="raiting">
-          <StarRaitin raiting={restaurant.rating} /> 
+          <StarRaiting raiting={restaurant.rating} /> 
           <span>{restaurant.rating}</span>
         </div>
       </footer>
     </div>
-  );  
+  ), [handleClick, restaurant]);
+
+
+  return isMobile ? MobileContent : DesktopContent;
 }

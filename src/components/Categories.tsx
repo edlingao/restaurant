@@ -1,7 +1,8 @@
 import { useRestaurant } from "@/hooks/useRestaurant";
 import { Category } from "./Category";
-import "@/styles/categories.scss";
 import { useHorizontalScroll } from "@/hooks/useHorizontalScroll";
+
+import "@/styles/categories.scss";
 
 export function Categories() {
   const {categories} = useRestaurant();

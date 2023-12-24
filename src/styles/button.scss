@@ -10,3 +10,10 @@
   cursor: pointer;
 }
 
+@media (max-width: 768px) {
+  .Button__button {
+    padding: 0.4rem 1rem;
+    font-size: 0.7rem; 
+  }
+}
+
