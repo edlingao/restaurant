@@ -134,3 +134,48 @@ $success: #00a698;
   }
 }
 
+@media (max-width: 768px) {
+  .restaurant-container {
+    grid-template-columns: 1fr;
+    height: 90dvh;
+
+    overflow: auto;
+
+    .restaurant-table {
+      width: 100%;
+      height: 8rem;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: stretch;
+
+      padding-bottom: 1rem;
+      border-bottom: 1px solid lightgray;
+
+      gap: 1rem;
+
+      .hero {
+        width: 6rem;
+        height: 100%;
+        background-position: center; 
+        background-repeat: no-repeat;
+        background-size: cover; 
+      }
+
+      .restaurant-table__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .price {
+        width: 2rem;
+        height: 1.2rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+

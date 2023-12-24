@@ -14,7 +14,7 @@ export function Category({title, code}: CategoryProps) {
   }
   return (
     <button className={`category ${code === category ? 'selected' : ''}`} onClick={handleClick}>
-      {title}
+      <p className="elipsis">{title}</p>
     </button>
   );
 }
