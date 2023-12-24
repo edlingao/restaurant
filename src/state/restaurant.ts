@@ -24,11 +24,14 @@ const initialState: RestaurantState = {
   offset: 0,
 };
 
-export const fetchRestaurants = createAsyncThunk('restaurant/fetch', async (args: Args) => {
+
+export const fetchRestaurants = createAsyncThunk('restaurant/fetch', async (args: Args, {getState}): Promise<{restaurants: Restaurant[], categories: Category[], save: boolean}> => {
+  const state = getState() as RestaurantState;
+
   const searchParams = new URLSearchParams({
-    limit: args.limit ? args.limit.toString() : "20",
-    offset: args.offset ? args.offset.toString() : "0",
-    category: args.category ? args.category : "",
+    limit: state.limit.toString(),
+    offset: state.offset.toString(),
+    category: state.category || "",
   }).toString();
 
   const response = await fetch(`${BaseURL}/restaurants/${args.location}?${searchParams}`, {
@@ -45,6 +48,9 @@ export const selectIsLoading = (state: { restaurant: RestaurantState }) => state
 export const selectRestaurants = (state: { restaurant: RestaurantState }) => state.restaurant.restaurants;
 export const selectCategories = (state: { restaurant: RestaurantState }) => state.restaurant.categories;
 export const selectCategory = (state: { restaurant: RestaurantState }) => state.restaurant.category;
+export const selectLimit = (state: { restaurant: RestaurantState }) => state.restaurant.limit;
+export const selectOffset = (state: { restaurant: RestaurantState }) => state.restaurant.offset;
+
 
 export default createSlice({
   name: 'restaurant',
@@ -52,7 +58,13 @@ export default createSlice({
   reducers: {
     categorySelected(state, action) {
       state.category = action.payload;
-    }
+    },
+    locationSelected(state, action) {
+      state.location = action.payload;
+    },
+    advanceOffset(state) {
+      state.offset += state.limit;
+    },
   },
   extraReducers(builder) {
       builder
@@ -62,7 +74,13 @@ export default createSlice({
         })
         .addCase(fetchRestaurants.fulfilled, (state, action) => {
           state.status = 'succeeded';
-          state.restaurants = action.payload.restaurants;
+
+          if (false/*action.payload.save*/) {
+            state.restaurants = [...state.restaurants, ...action.payload.restaurants]; 
+          } else {
+            state.restaurants = action.payload.restaurants;
+          }
+
           state.categories = action.payload.categories;
           return state;
         })

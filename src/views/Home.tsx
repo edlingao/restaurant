@@ -5,15 +5,18 @@ import { useEffect } from "react";
 
 export default function Home() {
   
-  const {fetchRestaurantsHook, category, restaurants} = useRestaurant();
+  const {fetchRestaurantsHook, category, restaurants, isFetching, offset  } = useRestaurant();
+
+  console.log(offset);
   useEffect(() => {
+    
+    if (isFetching) return;
+
     fetchRestaurantsHook({
       location: "San Francisco",
-      limit: 10,
-      offset: 0,
-      category,
     });
-  }, [category, fetchRestaurantsHook]);
+
+  }, [category, fetchRestaurantsHook, isFetching, offset]);
 
   return (
     <main>
@@ -21,11 +24,16 @@ export default function Home() {
         <Categories />
         <main className="main restaurant-container">
           {restaurants.map((restaurant, index) => (
-            <RestaurantCard key={index} restaurant={restaurant} />
+            <RestaurantCard
+              key={index}
+              restaurant={restaurant}
+            />
           ))}
+          <div className="intersection"></div>
         </main>
       </header>
     </main>
   );
 }
+
 
