@@ -1,16 +1,14 @@
 import { useRef, useEffect, WheelEvent } from "react";
 
 export function useHorizontalScroll() {
-  const elRef = useRef();
+  const elRef = useRef<HTMLElement>();
   useEffect(() => {
     const el = elRef.current;
     if (el) {
       const onWheel = (e: WheelEvent<HTMLUListElement>) => {
         if (e.deltaY == 0) return;
         e.preventDefault();
-      // @ts-expect-error - Do not hace access to the right element
         el.scrollTo({
-      // @ts-expect-error - Do not hace access to the right element
           left: el.scrollLeft + e.deltaY * 5,
           behavior: "smooth"
         });
