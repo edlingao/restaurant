@@ -12,5 +12,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Example />
       </div>
     </Provider>
-  </React.StrictMode>,
-)

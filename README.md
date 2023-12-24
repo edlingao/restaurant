@@ -1,6 +1,14 @@
 # Restaurant - FrontEnd
 
-### Instructions
+## Instructions
+
+
+### Install BUN
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
+
 
 
 
