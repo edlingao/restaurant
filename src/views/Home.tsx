@@ -1,22 +1,37 @@
 import { Categories } from "@/components/Categories";
 import { RestaurantCard } from "@/components/RestaurantCard";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useRestaurant } from "@/hooks/useRestaurant";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   
-  const {fetchRestaurantsHook, category, restaurants, isFetching, offset  } = useRestaurant();
+  const {fetchRestaurantsHook, category, restaurants, status, addOffset } = useRestaurant();
+  const [observed, setObserved] = useState(false);
 
-  console.log(offset);
+  const { scrollRef } = useInfiniteScroll((entries: IntersectionObserverEntry[]) => {
+    if (entries[0].isIntersecting) {
+      setObserved(true);
+      addOffset();
+      fetchRestaurantsHook({
+        location: "San Francisco",
+      });
+    }
+  });
+
   useEffect(() => {
-    
-    if (isFetching) return;
+    if(status === "idle") {
+      fetchRestaurantsHook({
+        location: "San Francisco",
+      });
+    }
+  }, [ fetchRestaurantsHook, category, status]);
 
-    fetchRestaurantsHook({
-      location: "San Francisco",
-    });
-
-  }, [category, fetchRestaurantsHook, isFetching, offset]);
+  useEffect(() => {
+    if(observed) {
+      setObserved(false);
+    }
+  }, [observed]);
 
   return (
     <main>
@@ -29,7 +44,20 @@ export default function Home() {
               restaurant={restaurant}
             />
           ))}
-          <div className="intersection"></div>
+          { observed && <>
+              <div>Loading...</div>
+              <div>Loading...</div>
+              <div>Loading...</div>
+              <div>Loading...</div>
+              <div>Loading...</div>
+              <div>Loading...</div>
+              <div>Loading...</div>
+              <div>Loading...</div>
+              <div>Loading...</div>
+              <div>Loading...</div>
+              <div>Loading...</div>
+          </>}
+          <div ref={scrollRef} className="intersection"></div>
         </main>
       </header>
     </main>

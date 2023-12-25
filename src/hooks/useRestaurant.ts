@@ -1,5 +1,5 @@
 import { Args, Category, Restaurant } from "@/@types/index";
-import restaurant, { fetchRestaurants, selectCategories, selectCategory, selectIsLoading, selectOffset, selectRestaurants } from "@/state/restaurant";
+import restaurant, { fetchRestaurants, selectCategories, selectCategory, selectIsLoading, selectOffset, selectRestaurants, selectStatus } from "@/state/restaurant";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from ".";
@@ -11,6 +11,7 @@ export const useRestaurant = () => {
   const categories = useAppSelector(selectCategories);
   const category = useAppSelector(selectCategory);
   const offset = useAppSelector(selectOffset);
+  const status = useAppSelector(selectStatus);
 
   const fetchRestaurantsHook = useCallback(async (args: Args): Promise<{ restaurants: Restaurant[], categories: Category[] }> => {
     return await dispatch(fetchRestaurants(args))
@@ -19,6 +20,10 @@ export const useRestaurant = () => {
 
   const setCategory = useCallback((category: string) => {
     return dispatch(restaurant.actions.categorySelected(category));
+  }, [dispatch]);
+
+  const setStatusToIdle = useCallback(() => {
+    return dispatch(restaurant.actions.statusToIdle());
   }, [dispatch]);
   
   const addOffset = useCallback(() => {
@@ -34,6 +39,8 @@ export const useRestaurant = () => {
     setCategory,
     addOffset,
     offset,
+    status,
+    setStatusToIdle,
   };
 }
 
