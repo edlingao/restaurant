@@ -6,7 +6,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import '@/styles/restaurant.scss';
 import { Button } from "./Button";
 import useIsMobile from "@/hooks/useIsMobile";
-import { memo, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 type RestaurantCardProps = {
   restaurant: Restaurant;
