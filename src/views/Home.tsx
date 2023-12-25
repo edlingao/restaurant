@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   
   const {fetchRestaurantsHook, category, restaurants, status, addOffset } = useRestaurant();
-  const [observed, setObserved] = useState(true);
+  const [observed, setObserved] = useState(false);
 
   const { scrollRef } = useInfiniteScroll((entries: IntersectionObserverEntry[]) => {
     if (entries[0].isIntersecting) {
