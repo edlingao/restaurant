@@ -1,5 +1,6 @@
 import { Categories } from "@/components/Categories";
 import { RestaurantCard } from "@/components/RestaurantCard";
+import { SkeletonCard } from "@/components/RestaurantSkeleton";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useRestaurant } from "@/hooks/useRestaurant";
 import { useEffect, useState } from "react";
@@ -7,7 +8,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   
   const {fetchRestaurantsHook, category, restaurants, status, addOffset } = useRestaurant();
-  const [observed, setObserved] = useState(false);
+  const [observed, setObserved] = useState(true);
 
   const { scrollRef } = useInfiniteScroll((entries: IntersectionObserverEntry[]) => {
     if (entries[0].isIntersecting) {
@@ -44,18 +45,16 @@ export default function Home() {
               restaurant={restaurant}
             />
           ))}
-          { observed && <>
-              <div>Loading...</div>
-              <div>Loading...</div>
-              <div>Loading...</div>
-              <div>Loading...</div>
-              <div>Loading...</div>
-              <div>Loading...</div>
-              <div>Loading...</div>
-              <div>Loading...</div>
-              <div>Loading...</div>
-              <div>Loading...</div>
-              <div>Loading...</div>
+          { status === "loading" && <>
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
           </>}
           <div ref={scrollRef} className="intersection"></div>
         </main>
